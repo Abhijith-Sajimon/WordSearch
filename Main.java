@@ -11,13 +11,13 @@ public class Main {
             System.out.println("File path and search word cannot be empty");
             return;
         }
-        String path = args[0];
-        String search = args[1];
-        File file = new File(path);
+        String textFilePath = args[0];
+        String searchKeyword = args[1];
+        File file = new File(textFilePath);
         System.out.println("Processing...");
         validateFile(file);
-        if (!validateFile(file)) {
-            wordCount(file, search);
+        if (validateFile(file)) {
+            wordCount(file, searchKeyword);
         }
     }
 
@@ -25,37 +25,34 @@ public class Main {
 
         if (!file.exists()) {
             System.out.println("File does not exist");
+
+        } else if (!(file.getName().endsWith(".txt") || file.getName().endsWith(".json"))) {
+            System.out.println("File format not supported");
             System.exit(0);
-        } else {
-            String fullName = file.getName();
-            if (!(fullName.endsWith(".txt") || fullName.endsWith(".json"))) {
-                System.out.println("File format not supported");
-                System.exit(0);
-            }
         }
-        return false;
+        return true;
     }
 
-    private static void wordCount(File file, String search) {
+    private static void wordCount(File file, String searchKeyword) {
 
-        String data = "";
+        String fileData = "";
         try {
-            FileReader reader = new FileReader(file);
-            BufferedReader buffer = new BufferedReader(reader);
-            data = buffer.readLine();
+            FileReader fileReader = new FileReader(file);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            fileData = bufferedReader.readLine();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (data != null) {
-            data = data.replaceAll("\\p{Punct}", "");
+        if (fileData != null) {
+            fileData = fileData.replaceAll("\\p{Punct}", "");
         } else {
-            System.out.println("Empty file");
+            System.out.println("File does not contain any data");
             return;
         }
-        StringTokenizer st = new StringTokenizer(data);
+        StringTokenizer st = new StringTokenizer(fileData);
         int wordcount = 0;
         while (st.hasMoreTokens()) {
-            if (search.equalsIgnoreCase(st.nextToken())) {
+            if (searchKeyword.equalsIgnoreCase(st.nextToken())) {
                 wordcount++;
             }
         }
@@ -63,7 +60,7 @@ public class Main {
             System.out.println("Word does not exist");
         } else {
             System.out.println("Word found");
-            System.out.println(search + " occurs " + wordcount + " times in the file");
+            System.out.println(searchKeyword + " occurs " + wordcount + " times in the file");
         }
     }
 }
