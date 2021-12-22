@@ -1,6 +1,8 @@
 package com.company;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -13,7 +15,7 @@ public class Main {
     public static void main(String[] args) {
 
         if (args.length != 2) {
-            System.out.println("File path and search word cannot be empty");
+            System.out.println("File path and Search word cannot be empty");
             return;
         }
         String textFilePath = args[0];
@@ -21,7 +23,7 @@ public class Main {
         File file = new File(textFilePath);
         System.out.println("Processing...");
         if (validateFile(file)) {
-            wordCount(file, searchKeyword);
+            wordCount(textFilePath, searchKeyword);
         }
     }
 
@@ -37,34 +39,37 @@ public class Main {
         return true;
     }
 
-    private static void wordCount(File file, String searchKeyword) {
+    private static void wordCount(String textFilePath, String searchKeyword) {
 
-        String fileData = "";
+        StringBuilder stringBuilder = new StringBuilder();
+        int wordCount = 0;
+        String fileData;
         try {
-            FileReader fileReader = new FileReader(file);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            BufferedReader bufferedReader = Files.newBufferedReader(Paths.get(textFilePath));
             fileData = bufferedReader.readLine();
+            if (fileData == null) {
+                System.out.println("File does not contain any data");
+                return;
+            } else
+                while (fileData != null) {
+                    stringBuilder.append(fileData).append("\n");
+                    fileData = fileData.replaceAll(REMOVE_SPECIAL_CHAR, SINGLE_SPACE);
+                    StringTokenizer splitIntoToken = new StringTokenizer(fileData);
+                    while (splitIntoToken.hasMoreTokens()) {
+                        if (searchKeyword.equalsIgnoreCase(splitIntoToken.nextToken())) {
+                            wordCount++;
+                        }
+                    }
+                }
+            if (wordCount == 0) {
+                System.out.println("Word does not exist");
+            } else {
+                System.out.println("Word found");
+                System.out.println(searchKeyword + " occurs " + wordCount + " times in the file");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (fileData != null) {
-            fileData = fileData.replaceAll(REMOVE_SPECIAL_CHAR, SINGLE_SPACE);
-        } else {
-            System.out.println("File does not contain any data");
-            return;
-        }
-        StringTokenizer str = new StringTokenizer(fileData);
-        int wordcount = 0;
-        while (str.hasMoreTokens()) {
-            if (searchKeyword.equalsIgnoreCase(str.nextToken())) {
-                wordcount++;
-            }
-        }
-        if (wordcount == 0) {
-            System.out.println("Word does not exist");
-        } else {
-            System.out.println("Word found");
-            System.out.println(searchKeyword + " occurs " + wordcount + " times in the file");
-        }
     }
 }
+
