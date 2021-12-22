@@ -5,6 +5,11 @@ import java.util.StringTokenizer;
 
 public class Main {
 
+    final static String FILE_TYPE_TXT = ".txt";
+    final static String FILE_TYPE_JSON = ".json";
+    final static String REMOVE_SPECIAL_CHAR = "\\p{Punct}";
+    final static String SINGLE_SPACE = "";
+
     public static void main(String[] args) {
 
         if (args.length != 2) {
@@ -15,7 +20,6 @@ public class Main {
         String searchKeyword = args[1];
         File file = new File(textFilePath);
         System.out.println("Processing...");
-        validateFile(file);
         if (validateFile(file)) {
             wordCount(file, searchKeyword);
         }
@@ -25,10 +29,10 @@ public class Main {
 
         if (!file.exists()) {
             System.out.println("File does not exist");
-
-        } else if (!(file.getName().endsWith(".txt") || file.getName().endsWith(".json"))) {
-            System.out.println("File format not supported");
             System.exit(0);
+        } else if (!(file.getName().endsWith(FILE_TYPE_TXT) || file.getName().endsWith(FILE_TYPE_JSON))) {
+            System.out.println("File format not supported");
+            return false;
         }
         return true;
     }
@@ -44,15 +48,15 @@ public class Main {
             e.printStackTrace();
         }
         if (fileData != null) {
-            fileData = fileData.replaceAll("\\p{Punct}", "");
+            fileData = fileData.replaceAll(REMOVE_SPECIAL_CHAR, SINGLE_SPACE);
         } else {
             System.out.println("File does not contain any data");
             return;
         }
-        StringTokenizer st = new StringTokenizer(fileData);
+        StringTokenizer str = new StringTokenizer(fileData);
         int wordcount = 0;
-        while (st.hasMoreTokens()) {
-            if (searchKeyword.equalsIgnoreCase(st.nextToken())) {
+        while (str.hasMoreTokens()) {
+            if (searchKeyword.equalsIgnoreCase(str.nextToken())) {
                 wordcount++;
             }
         }
