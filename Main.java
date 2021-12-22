@@ -31,7 +31,7 @@ public class Main {
 
         if (!file.exists()) {
             System.out.println("File does not exist");
-            System.exit(0);
+            return false;
         } else if (!(file.getName().endsWith(FILE_TYPE_TXT) || file.getName().endsWith(FILE_TYPE_JSON))) {
             System.out.println("File format not supported");
             return false;
@@ -50,7 +50,7 @@ public class Main {
             if (fileData == null) {
                 System.out.println("File does not contain any data");
                 return;
-            } else
+            } else {
                 while (fileData != null) {
                     stringBuilder.append(fileData).append("\n");
                     fileData = fileData.replaceAll(REMOVE_SPECIAL_CHAR, SINGLE_SPACE);
@@ -61,11 +61,12 @@ public class Main {
                         }
                     }
                 }
-            if (wordCount == 0) {
-                System.out.println("Word does not exist");
-            } else {
-                System.out.println("Word found");
-                System.out.println(searchKeyword + " occurs " + wordCount + " times in the file");
+                if (wordCount == 0) {
+                    System.out.println("Word does not exist");
+                } else {
+                    System.out.println("Word found");
+                    System.out.println(searchKeyword + " occurs " + wordCount + " times in the file");
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
