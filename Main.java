@@ -22,12 +22,12 @@ public class Main {
         String searchKeyword = args[1];
         File file = new File(textFilePath);
         System.out.println("Processing...");
-        if (validateFile(file)) {
+        if (isValidFile(file)) {
             wordCount(textFilePath, searchKeyword);
         }
     }
 
-    private static boolean validateFile(File file) {
+    private static boolean isValidFile(File file) {
 
         if (!file.exists()) {
             System.out.println("File does not exist");
