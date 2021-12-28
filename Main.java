@@ -4,26 +4,42 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Main {
 
-    final static String FILE_TYPE_TXT = ".txt";
-    final static String FILE_TYPE_JSON = ".json";
-    final static String REMOVE_SPECIAL_CHAR = "\\p{Punct}";
-    final static String SINGLE_SPACE = "";
+    static final String FILE_TYPE_TXT = ".txt";
+    static final String FILE_TYPE_JSON = ".json";
+    static final String REMOVE_SPECIAL_CHAR = "\\p{Punct}";
+    static final String SINGLE_SPACE = "";
+    static final String EXCLUDE_SPECIAL_CHAR = "[a-zA-Z0-9\"\"]";
 
     public static void main(String[] args) {
 
-        if (args.length != 2) {
+        if (args.length < 2) {
             System.out.println("File path and Search word cannot be empty");
+            return;
+        }
+        else if(args.length > 2){
+            System.out.println("There can only be two arguments");
             return;
         }
         String textFilePath = args[0];
         String searchKeyword = args[1];
+        Matcher matcher = Pattern.compile(REMOVE_SPECIAL_CHAR).matcher(searchKeyword);
+        while (matcher.find()) {
+            System.out.println("Search word cannot contain any special characters");
+            return;
+        }
         File file = new File(textFilePath);
         System.out.println("Processing...");
         if (isValidFile(file)) {
-            wordCount(textFilePath, searchKeyword);
+            if (file.length() != 0) {
+                wordCount(textFilePath, searchKeyword);
+            } else {
+                System.out.println("File does not contain any data");
+            }
         }
     }
 
@@ -41,36 +57,27 @@ public class Main {
 
     private static void wordCount(String textFilePath, String searchKeyword) {
 
-        StringBuilder stringBuilder = new StringBuilder();
         int wordCount = 0;
         String fileData;
         try {
             BufferedReader bufferedReader = Files.newBufferedReader(Paths.get(textFilePath));
-            fileData = bufferedReader.readLine();
-            if (fileData == null) {
-                System.out.println("File does not contain any data");
-                return;
-            } else {
-                while (fileData != null) {
-                    stringBuilder.append(fileData).append("\n");
-                    fileData = fileData.replaceAll(REMOVE_SPECIAL_CHAR, SINGLE_SPACE);
-                    StringTokenizer splitIntoToken = new StringTokenizer(fileData);
-                    while (splitIntoToken.hasMoreTokens()) {
-                        if (searchKeyword.equalsIgnoreCase(splitIntoToken.nextToken())) {
-                            wordCount++;
-                        }
+            while ((fileData = bufferedReader.readLine()) != null) {
+                fileData = fileData.replaceAll(REMOVE_SPECIAL_CHAR, SINGLE_SPACE);
+                StringTokenizer splitIntoToken = new StringTokenizer(fileData);
+                while (splitIntoToken.hasMoreTokens()) {
+                    if (searchKeyword.equalsIgnoreCase(splitIntoToken.nextToken())) {
+                        wordCount++;
                     }
                 }
-                if (wordCount == 0) {
-                    System.out.println("Word does not exist");
-                } else {
-                    System.out.println("Word found");
-                    System.out.println(searchKeyword + " occurs " + wordCount + " times in the file");
-                }
+            }
+            if (wordCount == 0) {
+                System.out.println("Word does not exist");
+            } else {
+                System.out.println("Word found");
+                System.out.println(searchKeyword + " occurs " + wordCount + " times in the file");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 }
-
