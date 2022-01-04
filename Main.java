@@ -6,25 +6,27 @@ import java.nio.file.Paths;
 import java.sql.*;
 import java.util.StringTokenizer;
 
+import static com.company.Main.ERROR_MESSAGE;
 import static com.company.Main.statement;
 
-public class Main extends Database {
+public class Main {
 
     static final String FILE_TYPE_TXT = ".txt";
     static final String FILE_TYPE_JSON = ".json";
     static final String REMOVE_SPECIAL_CHAR = "[^a-zA-Z0-9 -]";
     static final String SINGLE_SPACE = "";
+    static String ERROR_MESSAGE;
     static PreparedStatement statement;
     static String textFilePath;
     static String searchKeyword;
-    static String errorMessage;
+
 
     public static void main(String[] args) {
 
         if (args.length != 2) {
-            System.out.println("Provide valid filepath and search keyword");
-            errorMessage = "Provide valid filepath and search keyword";
-            Database.wordSearchFailure(null, null, errorMessage);
+            ERROR_MESSAGE = "Provide valid filepath and search keyword";
+            System.out.println(ERROR_MESSAGE);
+            Database.wordSearchFailure(null, null, ERROR_MESSAGE);
             return;
         }
         textFilePath = args[0];
@@ -36,9 +38,9 @@ public class Main extends Database {
                 if (file.length() != 0) {
                     wordCount(textFilePath, searchKeyword);
                 } else {
-                    System.out.println("File does not contain any data");
-                    errorMessage = "Provide valid filepath and search keyword";
-                    Database.wordSearchFailure(textFilePath, searchKeyword, errorMessage);
+                    ERROR_MESSAGE = "File does not contain any data";
+                    System.out.println(ERROR_MESSAGE);
+                    Database.wordSearchFailure(textFilePath, searchKeyword, ERROR_MESSAGE);
                 }
             }
         } catch (ClassNotFoundException e) {
@@ -46,17 +48,17 @@ public class Main extends Database {
         }
     }
 
-    static boolean isValidFile(File file) throws ClassNotFoundException {
+    private static boolean isValidFile(File file) throws ClassNotFoundException {
 
         if (!file.exists()) {
-            System.out.println("File does not exist");
-            errorMessage = "File does not exist";
-            Database.wordSearchFailure(textFilePath, searchKeyword, errorMessage);
+            ERROR_MESSAGE = "File does not exist";
+            System.out.println(ERROR_MESSAGE);
+            Database.wordSearchFailure(textFilePath, searchKeyword, ERROR_MESSAGE);
             return false;
         } else if (!(file.getName().endsWith(FILE_TYPE_TXT) || file.getName().endsWith(FILE_TYPE_JSON))) {
-            System.out.println("File format not supported");
-            errorMessage = "File format not supported";
-            Database.wordSearchFailure(textFilePath, searchKeyword, errorMessage);
+            ERROR_MESSAGE = "File format not supported";
+            System.out.println(ERROR_MESSAGE);
+            Database.wordSearchFailure(textFilePath, searchKeyword, ERROR_MESSAGE);
             return false;
         }
         return true;
@@ -78,10 +80,9 @@ public class Main extends Database {
                 }
             }
             if (count == 0) {
-                System.out.println("Word does not exist");
-                errorMessage = "Word does not exist";
-                Database.wordSearchFailure(textFilePath, searchKeyword, errorMessage);
-
+                ERROR_MESSAGE = "Word does not exist";
+                System.out.println(ERROR_MESSAGE);
+                Database.wordSearchFailure(textFilePath, searchKeyword, ERROR_MESSAGE);
             } else {
                 System.out.println("Word found");
                 System.out.println(searchKeyword + " occurs " + count + " times in the file");
@@ -95,9 +96,9 @@ public class Main extends Database {
 
 class Database {
 
-    private static String connectionUrl = "jdbc:mysql://localhost:3306/elixr_labs_internship";
-    private static String user = "root";
-    private static String password = "abhijith.sajimon@29";
+    private static String CONNECTION_URL = "jdbc:mysql://localhost:3306/elixr_labs_internship";
+    private static String USER = "root";
+    private static String PASSWORD = "abhijith.sajimon@29";
     private static String SEARCH_RESULT_SUCCESS = "Success";
     private static String SEARCH_RESULT_FAILURE = "Failure";
 
@@ -109,13 +110,13 @@ class Database {
         }
         String insertSql = "INSERT INTO audit VALUES(?,?,now(),?,?,?)";
         try {
-            Connection connect = DriverManager.getConnection(connectionUrl, user, password);
+            Connection connect = DriverManager.getConnection(CONNECTION_URL, USER, PASSWORD);
             statement = connect.prepareStatement(insertSql);
             statement.setString(1, textFilePath);
             statement.setString(2, searchKeyword);
             statement.setString(3, SEARCH_RESULT_FAILURE);
             statement.setInt(4, 0);
-            statement.setString(5, errorMessage);
+            statement.setString(5, ERROR_MESSAGE);
             statement.executeUpdate();
             connect.close();
         } catch (SQLException e) {
@@ -131,7 +132,7 @@ class Database {
         }
         String insertSql = "INSERT INTO audit VALUES(?,?,now(),?,?,?)";
         try {
-            Connection connect = DriverManager.getConnection(connectionUrl, user, password);
+            Connection connect = DriverManager.getConnection(CONNECTION_URL, USER, PASSWORD);
             statement = connect.prepareStatement(insertSql);
             statement.setString(1, textFilePath);
             statement.setString(2, searchKeyword);
