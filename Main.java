@@ -6,12 +6,12 @@ import com.company.dbconnection.DatabaseLink;
 
 public class Main {
 
-    static String textFilePath = null;
-    static String searchKeyword = null;
     static DatabaseLink databaseLink = new DatabaseLink();
 
     public static void main(String[] args) {
 
+        String textFilePath = null;
+        String searchKeyword = null;
         if ((args[0] != null && !args[0].isBlank()) || (args[1] != null && !args[1].isBlank())) {
             System.out.println(Constants.ERROR_MESSAGE_INVALID_INPUT);
             databaseLink.DatabaseConnection(textFilePath, searchKeyword, Constants.FAILURE, Constants.ERROR_MESSAGE_INVALID_INPUT, 0);
