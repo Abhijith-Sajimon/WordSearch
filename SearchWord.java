@@ -1,23 +1,23 @@
 package com.company;
 
+import com.company.dbconnection.DatabaseLink;
+
 import java.io.BufferedReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.StringTokenizer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static com.company.Main.databaseLink;
 
 public class SearchWord extends Thread {
 
+    private static DatabaseLink databaseLink;
     private static String textFilePath;
     private static String searchKeyword;
 
-    public SearchWord(String textFilePath, String searchKeyword) {
+    public SearchWord(String textFilePath, String searchKeyword, DatabaseLink databaseLink) {
 
-        this.textFilePath = textFilePath;
-        this.searchKeyword = searchKeyword;
+        SearchWord.textFilePath = textFilePath;
+        SearchWord.searchKeyword = searchKeyword;
+        SearchWord.databaseLink = databaseLink;
     }
 
     public void run() {

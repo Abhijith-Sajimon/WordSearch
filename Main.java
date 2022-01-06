@@ -33,7 +33,7 @@ public class Main {
         System.out.println("Processing...");
         if (isValidFile(file, textFilePath, searchKeyword)) {
             if (file.length() != 0) {
-                SearchWord searchWord = new SearchWord(textFilePath, searchKeyword);
+                SearchWord searchWord = new SearchWord(textFilePath, searchKeyword, databaseLink);
                 searchWord.start();
                 System.out.println(searchWord.isAlive());
                 System.out.println(searchWord.getName());
