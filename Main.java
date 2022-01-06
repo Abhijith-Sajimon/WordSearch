@@ -1,34 +1,47 @@
 package com.company;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.StringTokenizer;
 
 import com.company.dbconnection.DatabaseLink;
 
 public class Main {
 
-    static String textFilePath = null;
-    static String searchKeyword = null;
     static DatabaseLink databaseLink = new DatabaseLink();
 
     public static void main(String[] args) {
 
-        if ((args.length != 2) || (args[0] == null || args[0] == " " || args[0] == "") || (args[1] == null || args[1] == " " || args[1] == "")) {
-            System.out.println(Constants.ERROR_MESSAGE_INVALID_INPUT);
-            databaseLink.DatabaseConnection(textFilePath, searchKeyword, Constants.FAILURE, Constants.ERROR_MESSAGE_INVALID_INPUT, 0);
+        String textFilePath = null;
+        String searchKeyword = null;
+        if (args.length != 2) {
+            System.out.println(Constants.ERROR_MESSAGE_INCORRECT_NUMBER_OF_INPUTS);
+            databaseLink.DatabaseConnection(textFilePath, searchKeyword, Constants.FAILURE, Constants.ERROR_MESSAGE_INCORRECT_NUMBER_OF_INPUTS, 0);
             return;
         }
         textFilePath = args[0];
         searchKeyword = args[1];
+        if (textFilePath == null || textFilePath.isEmpty()) {
+            System.out.println(Constants.ERROR_MESSAGE_FILE_PATH_EMPTY_OR_NULL);
+            databaseLink.DatabaseConnection(textFilePath, searchKeyword, Constants.FAILURE, Constants.ERROR_MESSAGE_FILE_PATH_EMPTY_OR_NULL, 0);
+            return;
+        }
+        if (searchKeyword == null || searchKeyword.isEmpty()) {
+            System.out.println(Constants.ERROR_MESSAGE_SEARCH_WORD_EMPTY_OR_NULL);
+            databaseLink.DatabaseConnection(textFilePath, searchKeyword, Constants.FAILURE, Constants.ERROR_MESSAGE_SEARCH_WORD_EMPTY_OR_NULL, 0);
+            return;
+        }
         File file = new File(textFilePath);
         System.out.println("Processing...");
         if (isValidFile(file, textFilePath, searchKeyword)) {
             if (file.length() != 0) {
-                SearchWord searchWord = new SearchWord(textFilePath,searchKeyword);
-                Thread wordCount = new Thread(searchWord);
-                wordCount.start();
+                SearchWord searchWord = new SearchWord(textFilePath, searchKeyword);
+                searchWord.start();
+                System.out.println(searchWord.isAlive());
+                System.out.println(searchWord.getName());
+                try {
+                    searchWord.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             } else {
                 System.out.println(Constants.ERROR_MESSAGE_EMPTY_FILE);
                 databaseLink.DatabaseConnection(textFilePath, searchKeyword, Constants.FAILURE, Constants.ERROR_MESSAGE_EMPTY_FILE, 0);
