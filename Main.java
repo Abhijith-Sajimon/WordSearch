@@ -6,7 +6,7 @@ import com.company.dbconnection.DatabaseLink;
 
 public class Main {
 
-    static DatabaseLink databaseLink = new DatabaseLink();
+    private static DatabaseLink databaseLink = new DatabaseLink();
 
     public static void main(String[] args) {
 
