@@ -15,7 +15,7 @@ public class Constants {
     public static final String ERROR_MESSAGE_WORD_NOT_FOUND = "Word not found";
     public static final String SUCCESS = "SUCCESS";
     public static final String FAILURE = "FAILURE";
-    public static final String insertSql = "INSERT INTO audit VALUES(?,?,now(),?,?,?)";
+    public static final String INSERT_SQL_STATEMENT  = "INSERT INTO audit VALUES(?,?,now(),?,?,?)";
     public static final String CONNECTION_URL = "jdbc:mysql://localhost:3306/elixr_labs_internship";
     public static final String USER = "root";
     public static final String PASSWORD = "abhijith.sajimon@29";

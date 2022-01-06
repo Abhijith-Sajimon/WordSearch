@@ -20,7 +20,7 @@ public class DatabaseLink {
         try {
             PreparedStatement statement;
             connect = DriverManager.getConnection(Constants.CONNECTION_URL, Constants.USER, Constants.PASSWORD);
-            statement = connect.prepareStatement(Constants.insertSql);
+            statement = connect.prepareStatement(Constants.INSERT_SQL_STATEMENT);
             statement.setString(1, textFilePath);
             statement.setString(2, searchKeyword);
             statement.setString(3, searchResult);
