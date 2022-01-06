@@ -9,15 +9,15 @@ import java.util.StringTokenizer;
 
 public class SearchWord extends Thread {
 
-    private static DatabaseLink databaseLink;
-    private static String textFilePath;
-    private static String searchKeyword;
+    private final DatabaseLink databaseLink;
+    private final String textFilePath;
+    private final String searchKeyword;
 
     public SearchWord(String textFilePath, String searchKeyword, DatabaseLink databaseLink) {
 
-        SearchWord.textFilePath = textFilePath;
-        SearchWord.searchKeyword = searchKeyword;
-        SearchWord.databaseLink = databaseLink;
+        this.textFilePath = textFilePath;
+        this.searchKeyword = searchKeyword;
+        this.databaseLink = databaseLink;
     }
 
     public void run() {
