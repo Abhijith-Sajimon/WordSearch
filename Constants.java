@@ -19,5 +19,5 @@ public class Constants {
     public static final String INSERT_SQL_STATEMENT = "INSERT INTO audit VALUES(?,?,now(),?,?,?)";
     public static final String CONNECTION_URL = "jdbc:mysql://localhost:3306/elixr_labs_internship";
     public static final String USER = "root";
-    public static final String PASSWORD = "Vivek@12";
+    public static final String PASSWORD = "abhijith.sajimon@29";
 }

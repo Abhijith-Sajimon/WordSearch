@@ -29,7 +29,7 @@ public class Main {
             databaseLink.databaseConnection(textFilePath, searchKeyword, Constants.FAILURE, Constants.ERROR_MESSAGE_SEARCH_WORD_EMPTY_OR_NULL, 0);
             return;
         }
-        if (textFilePath.contains("/") || textFilePath.contains("\\")) {
+        if (textFilePath.contains("/") || textFilePath.contains("\\\\")) {
             System.out.println(Constants.ERROR_MESSAGE_INVALID_FILE_PATH);
             databaseLink.databaseConnection(textFilePath, searchKeyword, Constants.FAILURE, Constants.ERROR_MESSAGE_INVALID_FILE_PATH, 0);
             return;

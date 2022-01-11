@@ -28,7 +28,6 @@ public class SearchWord extends Thread {
             BufferedReader bufferedReader = Files.newBufferedReader(Paths.get(textFilePath));
             while ((fileData = bufferedReader.readLine()) != null) {
                 fileData = fileData.replaceAll(Constants.REMOVE_SPECIAL_CHAR, Constants.SINGLE_SPACE);
-                System.out.println(fileData);
                 StringTokenizer splitIntoToken = new StringTokenizer(fileData);
                 while (splitIntoToken.hasMoreTokens()) {
                     if (searchKeyword.equalsIgnoreCase(splitIntoToken.nextToken())) {
