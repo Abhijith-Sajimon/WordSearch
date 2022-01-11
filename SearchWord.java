@@ -28,6 +28,7 @@ public class SearchWord extends Thread {
             BufferedReader bufferedReader = Files.newBufferedReader(Paths.get(textFilePath));
             while ((fileData = bufferedReader.readLine()) != null) {
                 fileData = fileData.replaceAll(Constants.REMOVE_SPECIAL_CHAR, Constants.SINGLE_SPACE);
+                System.out.println(fileData);
                 StringTokenizer splitIntoToken = new StringTokenizer(fileData);
                 while (splitIntoToken.hasMoreTokens()) {
                     if (searchKeyword.equalsIgnoreCase(splitIntoToken.nextToken())) {
@@ -37,11 +38,11 @@ public class SearchWord extends Thread {
             }
             if (count == 0) {
                 System.out.println(Constants.ERROR_MESSAGE_WORD_NOT_FOUND);
-                databaseLink.DatabaseConnection(textFilePath, searchKeyword, Constants.FAILURE, Constants.ERROR_MESSAGE_WORD_NOT_FOUND, count);
+                databaseLink.databaseConnection(textFilePath, searchKeyword, Constants.FAILURE, Constants.ERROR_MESSAGE_WORD_NOT_FOUND, count);
             } else {
                 System.out.println("Word found");
                 System.out.println(searchKeyword + " occurs " + count + " times in the file");
-                databaseLink.DatabaseConnection(textFilePath, searchKeyword, Constants.SUCCESS, errorMessage, count);
+                databaseLink.databaseConnection(textFilePath, searchKeyword, Constants.SUCCESS, errorMessage, count);
             }
         } catch (Exception e) {
             e.printStackTrace();
