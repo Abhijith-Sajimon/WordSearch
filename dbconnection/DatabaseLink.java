@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class DatabaseLink {
 
-    public void DatabaseConnection(String textFilePath, String searchKeyword, String searchResult, String errorMessage, int count) {
+    public void databaseConnection(String textFilePath, String searchKeyword, String searchResult, String errorMessage, int count) {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
